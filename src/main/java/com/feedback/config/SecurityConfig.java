@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,24 +27,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors() // Enable CORS
-            .and()
-            .csrf().disable() // Disable CSRF for non-browser clients
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Using lambda for CORS
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for non-browser clients
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/auth/**").permitAll() // Allow all requests to /api/auth/**
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/public/**").permitAll()
-                .requestMatchers("/api/academic-years").permitAll() // Allow GET requests
-                .requestMatchers(HttpMethod.PUT, "/api/academic-years/**").permitAll() // Allow PUT requests
-                .requestMatchers(HttpMethod.DELETE, "/api/academic-years/**").permitAll() // Allow DELETE requests
-                .requestMatchers("/api/classes/**").permitAll() // Allow all requests to /api/classes
-                .requestMatchers(HttpMethod.PUT, "/api/classes/**").permitAll() 
+                .requestMatchers("/api/academic-years").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/academic-years/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/academic-years/**").permitAll()
+                .requestMatchers("/api/classes/**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/classes/**").permitAll()
                 .requestMatchers("/api/subjects/**").permitAll()
-                .anyRequest().authenticated() // Require authentication for any other requests
+                .requestMatchers("/api/criteria/**").permitAll()
+                .requestMatchers("/api/questions/**").permitAll()
+                .requestMatchers("/api/ratings/**").permitAll()
+                .anyRequest().authenticated()
             )
-            .exceptionHandling()
-            .authenticationEntryPoint((request, response, authException) -> {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + authException.getMessage());
-            });
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint((request, response, authException) -> 
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + authException.getMessage())
+                )
+            );
 
         return http.build();
     }
@@ -53,14 +55,24 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration());
+        return new CorsFilter(source);
+    }
+
+    private CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // Allow requests from this origin
-        config.addAllowedHeader("*"); // Allow all headers
-        config.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
-        config.setMaxAge(3600L); // 1 hour
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        config.addAllowedOrigin("http://localhost:3000"); // Adjust to match frontend origin
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setMaxAge(3600L); // Cache CORS preflight response for 1 hour
+        return config;
+    }
+
+    private UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration());
+        return source;
     }
 
     @Bean

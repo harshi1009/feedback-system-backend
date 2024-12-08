@@ -4,6 +4,9 @@ import com.feedback.model.User;
 import com.feedback.request.ForgotPasswordRequest;
 import com.feedback.request.ResetPasswordRequest;
 import com.feedback.service.AuthService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register( @RequestBody User user) {
         return authService.register(user);
     }
 
@@ -89,7 +92,7 @@ public class AuthController {
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         return authService.deleteUser(id);
     }
-
+    
     // DELETE all users
     @DeleteMapping("/deleteAll")
     public ResponseEntity<String> deleteAllUsers() {

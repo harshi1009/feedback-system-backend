@@ -15,8 +15,9 @@ public class AcademicYear {
     private Long id;
 
     @NotNull
-    @Size(min = 4, max = 4) // Assuming 'year' should be 4 characters (e.g., 2023)
+    @Size(min = 9, max = 9, message = "Year should be in the format 'YYYY-YYYY'")
     private String year;
+
 
     @NotNull
     @Size(min = 1, max = 10) // Adjust the size based on the expected semester input

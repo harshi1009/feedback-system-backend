@@ -1,46 +1,67 @@
 package com.feedback.model;
 
-//Criteria.java
-
-
-
-import java.util.List;
-
+import java.util.*;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@Table(name = "criteria")
 public class Criteria {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
 
- private String criteriaName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
- @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL)
- private List<Question> questions;
+    @Column(nullable = false)
+    private String text;
 
- // Getters and Setters
- public Long getId() {
-     return id;
- }
+    @Column(nullable = false)
+    private int position;
 
- public void setId(Long id) {
-     this.id = id;
- }
+    @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL)
+    @JsonManagedReference // Manages serialization of the Questions
+    private List<Question> questions;
 
- public String getCriteriaName() {
-     return criteriaName;
- }
 
- public void setCriteriaName(String criteriaName) {
-     this.criteriaName = criteriaName;
- }
 
- public List<Question> getQuestions() {
-     return questions;
- }
+    // Getters and Setters
+    public List<Question> getQuestions() {
+        return questions;
+    }
 
- public void setQuestions(List<Question> questions) {
-     this.questions = questions;
- }
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public Criteria() {
+    }
+
+    public Criteria(String text, int position) {
+        this.text = text;
+        this.position = position;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

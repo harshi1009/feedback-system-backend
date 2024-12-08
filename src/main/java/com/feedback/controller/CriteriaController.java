@@ -9,19 +9,36 @@ import com.feedback.service.CriteriaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/evaluation/criteria")
-@CrossOrigin(origins = "http://localhost:3000") // Adjust if needed
+@RequestMapping("/api/criteria")
+@CrossOrigin(origins = "http://localhost:3000") // Update with your frontend URL
 public class CriteriaController {
- @Autowired
- private CriteriaService criteriaService;
 
- @GetMapping
- public List<Criteria> getAllCriteria() {
-     return criteriaService.getAllCriteria();
- }
+    @Autowired
+    private CriteriaService criteriaService;
 
- @PostMapping
- public Criteria saveCriteria(@RequestBody Criteria criteria) {
-     return criteriaService.saveCriteria(criteria);
- }
+    @GetMapping
+    public List<Criteria> getAllCriteria() {
+        return criteriaService.getAllCriteria();
+    }
+
+    @PostMapping
+    public Criteria addCriteria(@RequestBody Criteria criteria) {
+        return criteriaService.addCriteria(criteria);
+    }
+
+    @PutMapping("/{id}")
+    public Criteria updateCriteria(@PathVariable Long id, @RequestBody Criteria updatedCriteria) {
+        return criteriaService.updateCriteria(id, updatedCriteria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCriteria(@PathVariable Long id) {
+        criteriaService.deleteCriteria(id);
+    }
+
+    @PostMapping("/reorder")
+    public void reorderCriteria(@RequestBody List<Criteria> reorderedList) {
+        criteriaService.reorderCriteria(reorderedList);
+    }
 }
+

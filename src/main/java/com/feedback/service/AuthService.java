@@ -12,11 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
@@ -29,15 +30,21 @@ public class AuthService {
 
     @Autowired
     private EmailService emailService;
+
     private static final SecureRandom random = new SecureRandom();
-
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
-
+    
     // Register a new user
     public ResponseEntity<String> register(User user) {
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             logger.warn("User registration failed: Email {} already exists", user.getEmail());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this email already exists");
+        }
+
+        // Validate email format
+        if (!isValidEmail(user.getEmail())) {
+            logger.warn("User registration failed: Invalid email format for email: {}", user.getEmail());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -64,11 +71,9 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Invalid user type", null));
         }
 
-
         logger.info("User logged in successfully: {}", user.getEmail());
         return ResponseEntity.ok(new LoginResponse(foundUser, "Login successful"));
     }
-
 
     // Send password reset verification code
     public ResponseEntity<String> sendVerificationCode(String email) {
@@ -115,6 +120,14 @@ public class AuthService {
     private String generateVerificationCode(int length) {
         int code = random.nextInt((int) Math.pow(10, length)); // Generate a number with the specified number of digits
         return String.format("%0" + length + "d", code); // Format it to ensure leading zeros are added if needed
+    }
+
+    // Validate email format using regex
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     // PUT: Update user by ID
@@ -207,4 +220,3 @@ public class AuthService {
         return ResponseEntity.ok("All users deleted successfully.");
     }
 }
-
