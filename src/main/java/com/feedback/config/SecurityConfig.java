@@ -59,7 +59,7 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
-    private CorsConfiguration corsConfiguration() {
+    public CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://vamshikumar32501.github.io/student-feedback-frontend"); // Adjust to match frontend origin
