@@ -94,8 +94,10 @@
 </dependency>
 
 	</dependencies>
-<profiles>
+
+	<profiles>
     <profile>
+<<<<<<< HEAD
 	<build>
     <plugins>
         <plugin>
@@ -108,6 +110,17 @@
         </plugin>
     </plugins>
 </build>
+=======
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+>>>>>>> origin/master
     </profile>
 </profiles>
+
 </project>
