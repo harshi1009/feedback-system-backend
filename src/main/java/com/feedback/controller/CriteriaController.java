@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/criteria")
-@CrossOrigin(origins = "http://localhost:3000") // Update with your frontend URL
+@CrossOrigin(origins = "https://vamshikumar32501.github.io/student-feedback-frontend") // Update with your frontend URL
 public class CriteriaController {
 
     @Autowired
