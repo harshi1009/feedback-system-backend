@@ -94,33 +94,22 @@
 </dependency>
 
 	</dependencies>
+<profiles>
+<profile>
 
-	<profiles>
-    <profile>
-<<<<<<< HEAD
-	<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-    
-            <configuration>
-                <mainClass>com.feedback.FeedbackSystemBackendApplication</mainClass>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-=======
   <build>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+                <mainClass>com.feedback.FeedbackSystemBackendApplication</mainClass>
+            </configuration>
       </plugin>
     </plugins>
   </build>
->>>>>>> origin/master
-    </profile>
-</profiles>
+</profile>
+    </profiles>
+
 
 </project>
