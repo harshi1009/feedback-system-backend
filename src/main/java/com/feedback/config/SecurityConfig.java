@@ -62,7 +62,7 @@ public class SecurityConfig {
     private CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // Adjust to match frontend origin
+        config.addAllowedOrigin("https://vamshikumar32501.github.io/student-feedback-frontend"); // Adjust to match frontend origin
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L); // Cache CORS preflight response for 1 hour
