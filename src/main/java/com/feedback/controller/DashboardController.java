@@ -11,7 +11,7 @@ import com.feedback.model.DashboardData;
 import com.feedback.service.DashboardService;
 
 //DashboardController.java
-@CrossOrigin(origins = "https://vamshikumar32501.github.io/student-feedback-frontend")
+@CrossOrigin(origins = "https://vamshikumar32501.github.io")
 @RestController
 @RequestMapping("/api/auth")
 public class DashboardController {
