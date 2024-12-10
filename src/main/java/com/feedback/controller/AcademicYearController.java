@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/academic-years")
-@CrossOrigin(origins = "https://vamshikumar32501.github.io/student-feedback-frontend")
+@CrossOrigin(origins = "https://vamshikumar32501.github.io")
 public class AcademicYearController {
 
     @Autowired
