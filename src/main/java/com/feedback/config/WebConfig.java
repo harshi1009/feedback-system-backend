@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://vamshikumar32501.github.io/student-feedback-frontend/") // Update with your frontend URL
+                .allowedOrigins("https://vamshikumar32501.github.io") // Update with your frontend URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*") // Allow specific headers
                 .allowCredentials(true)
