@@ -36,6 +36,10 @@ public class AuthService {
     
     // Register a new user
     public ResponseEntity<String> register(User user) {
+          if (userRepo.findByUsername(user.getUsername()).isPresent()) {
+        logger.warn("User registration failed: Username {} already exists", user.getUsername());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+    }
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             logger.warn("User registration failed: Email {} already exists", user.getEmail());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this email already exists");
@@ -55,7 +59,8 @@ public class AuthService {
 
     // Login a user
     public ResponseEntity<LoginResponse> login(User user) {
-        Optional<User> existingUser = userRepo.findByEmail(user.getEmail());
+            Optional<User> existingUser = userRepo.findByUsername(user.getUsername())
+            .or(() -> userRepo.findByEmail(user.getEmail()));
         if (existingUser.isEmpty()) {
             logger.warn("Login failed: User not found for email: {}", user.getEmail());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new LoginResponse("User not found",null));
